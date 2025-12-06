@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="CSS/user_dashboard.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <ul>
+        <a href="user_dashboard.html" class="active"><li>Dashboard</li></a>
+        <a href="calculator_page.html"><li>Calculate Bill</li></a>
+        <a href="result_page.html"><li>History</li></a>
+        <a href="#" onclick="handleLogout()"><li>Log out</li></a>
+    </ul>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- HEADER -->
+        <a href="profile_page.html">
+            <div  class="header">
+            <h2>Profile</h2>
+
+            <div class="user-box">
+                <span class="icon">👤</span>
+                <p id="usernameTxt">User</p>
+            </div>
+        </div>
+        </a>
+
+    <!-- CONTENT AREA -->
+    <div class="content">
+        <div class="card card-large">
+            <h3>⚡ Calculate Your Bill ⚡</h3>
+            <p>Quick access to calculate your electricity consumption.</p>
+            <a href="calculator_page.html" class="card-link">Go to Calculator</a>
+        </div>
+
+        <div class="card card-large">
+            <h3>📊 View Your Results</h3>
+            <p>Check all your previous electricity bill calculations.</p>
+            <a href="results_page.html" class="card-link">View Results</a>
+        </div>
+
+        <div class="card card-large">
+            <h3>👤 Profile</h3>
+            <p>Manage your account details and settings.</p>
+            <a href="profile_page.html" class="card-link">Go to Profile</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Supabase & Auth Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    // Display logged-in username
+    document.addEventListener('DOMContentLoaded', async () => {
+        const session = await initAuth();
+        if (session) {
+            const user = await getCurrentUser();
+            if (user) {
+                const usernameTxt = document.getElementById('usernameTxt');
+                usernameTxt.textContent = user.user_metadata?.full_name || user.email;
+            }
+        }
+    });
+
+    async function handleLogout() {
+        const success = await signOut();
+        if (success) {
+            window.location.href = 'login.html';
+        } else {
+            alert('Error logging out. Please try again.');
+        }
+    }
+</script>
+
+</body>
+</html>
