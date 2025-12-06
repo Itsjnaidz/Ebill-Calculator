@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation Results</title>
+    <link rel="stylesheet" href="CSS/result_page.css" />
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <ul>
+            <a href="user_dashboard.html"><li>Dashboard</li></a>
+            <a href="calculator_page.html"><li>Calculate Bill</li></a>
+            <a href="result_page.html"><li class="active">Results</li></a>
+            <a href="login.html"><li onclick="handleLogout()">Log out</li></a> 
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <a href="profile_page.html">
+            <div  class="header">
+            <h2>Profile</h2>
+
+            <div class="user-box">
+                <span class="icon">👤</span>
+                <p id="usernameTxt">User</p>
+            </div>
+        </div>
+        </a>
+
+        <!-- RESULTS TABLE -->
+        <div class="table-box">
+            <table id="myTable">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Power Consumption (kWh)</th>
+                        <th>Cost Per kWh (₱)</th>
+                        <th>Result (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="empty-row">
+                        <td colspan="4" class="empty-message">
+                            No calculations yet. <a href="calculator_page.html">Calculate your first bill</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+        const session = await initAuth();
+        if (session) {
+            await loadCalculations();
+        }
+    });
+
+    async function loadCalculations() {
+        const user = await getCurrentUser();
+        if (!user) return;
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('calculations')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            const table = document.getElementById("myTable");
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            if (data && data.length > 0) {
+                data.forEach(calc => {
+                    const row = tbody.insertRow();
+
+                    const cellMonth = row.insertCell(0);
+                    const cellPower = row.insertCell(1);
+                    const cellCost = row.insertCell(2);
+                    const cellResult = row.insertCell(3);
+
+                    cellMonth.innerHTML = calc.month;
+                    cellPower.innerHTML = parseFloat(calc.power_consumption).toFixed(2);
+                    cellCost.innerHTML = "₱ " + parseFloat(calc.cost_per_kwh).toFixed(2);
+                    cellResult.innerHTML = "₱ " + parseFloat(calc.result).toFixed(2);
+                });
+            } else {
+                const emptyRow = tbody.insertRow();
+                emptyRow.className = 'empty-row';
+                const emptyCell = emptyRow.insertCell(0);
+                emptyCell.colSpan = 4;
+                emptyCell.className = 'empty-message';
+                emptyCell.innerHTML = 'No calculations yet. <a href="calculator_page.html">Calculate your first bill</a>';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error loading calculations: ' + error.message);
+        }
+    }
+
+    async function handleLogout() {
+        const success = await signOut();
+        if (success) {
+            window.location.href = 'login.html';
+        } else {
+            alert('Error logging out. Please try again.');
+        }
+    }
+</script>
+
+</body>
+</html>
