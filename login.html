@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Bill Login</title>
+    <link rel="stylesheet" href="CSS/login.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="container">
+
+        <!-- LEFT SIDE -->
+        <div class="left-box">
+            <h1>Electricity Bill</h1>
+            <p class="hello">Hello,</p>
+            <h2>Welcome!</h2>
+
+            <p class="desc">
+                Welcome to the Electric Bill Management System.
+                Please sign in to organize, compute, and track
+                your electricity consumption effectively.
+            </p>
+        </div>
+
+        <!-- RIGHT SIDE LOGIN FORM -->
+        <div class="login-box">
+            <h2 class="form-title">Sign In</h2>
+
+            <form onsubmit="event.preventDefault(); handleLogin();">
+
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Your email" required>
+
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+
+                <button class="signin-btn" type="submit">Sign In</button>
+
+                <a class="forgot" href="#">Forgot password?</a>
+
+                <div class="social-buttons">
+                    <button type="button" class="google">Continue with Google</button>
+                    <button type="button" class="facebook">Continue with Facebook</button>
+                </div>
+
+                <a href="register.html" class="signup-btn">Create account</a>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const session = await checkAuth();
+        if (session) window.location.href = "user_dashboard.html";
+    });
+
+    async function handleLogin() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const btn = document.querySelector(".signin-btn");
+        btn.textContent = "Signing in...";
+        btn.disabled = true;
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            alert("Login failed: " + error.message);
+            btn.textContent = "Sign In";
+            btn.disabled = false;
+            return;
+        }
+
+        window.location.href = "user_dashboard.html";
+    }
+</script>
+
+</body>
+</html>
