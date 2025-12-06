@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Bill</title>
+    <link rel="stylesheet" href="CSS/calculator_page.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <ul>
+            <a href="user_dashboard.html"><li>Dashboard</li></a>
+            <a href="calculator_page.html"><li class="active">Calculate Bill</li></a>
+            <a href="result_page.html"><li>History</li></a>
+            <a href="login.html" onclick="handleLogout()"><li>Log out</li></a>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- HEADER -->
+        <div class="header">
+            <a href="profile_page.html">
+                <h2>Calculate Bill</h2>
+            <div class="user-box">
+                <span class="icon">👤</span>
+                <p id="usernameTxt">User</p>
+            </div>
+            </a>
+            
+        </div>
+
+        <!-- CARD -->
+        <div class="card">
+            <form onsubmit="event.preventDefault();">
+                <label>Month:</label>
+                <input id="month" type="text" placeholder="e.g., January 2024">
+
+                <label>Rate per kWh (₱):</label>
+                <input id="cost_per_kwh" type="number" step="0.01">
+
+                <label>Usage (kWh):</label>
+                <input id="power_consumption" type="number" step="0.01">
+
+                <button type="button" id="btn_calculate">Calculate</button>
+            </form>
+
+            <div id="result"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const session = await initAuth(); // initialize auth
+    if (session) {
+        const user = await getCurrentUser();
+        if (user) {
+            document.getElementById("usernameTxt").innerText = user.user_metadata?.full_name || user.email;
+        }
+    }
+});
+
+document.getElementById("btn_calculate").addEventListener("click", async function () {
+    const month = document.getElementById("month");
+    const power = document.getElementById("power_consumption");
+    const cost = document.getElementById("cost_per_kwh");
+    const result = document.getElementById("result");
+
+    if (!month.value || !power.value || !cost.value) {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    const user = await getCurrentUser();
+    if (!user) {
+        alert("You must be logged in to save calculations!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    const total = parseFloat(cost.value) * parseFloat(power.value);
+    result.innerHTML = `<h3>Total Bill: ₱ ${total.toFixed(2)}</h3>`;
+
+    try {
+        const { error } = await supabaseClient
+            .from("calculations")
+            .insert([
+                {
+                    user_id: user.id,
+                    month: month.value,
+                    power_consumption: parseFloat(power.value),
+                    cost_per_kwh: parseFloat(cost.value),
+                    result: total,
+                }
+            ]);
+        if (error) {
+            console.error(error);
+            alert("Saved locally but failed to save to DB.");
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Error saving calculation: " + e.message);
+    }
+
+    month.value = "";
+    power.value = "";
+    cost.value = "";
+});
+
+async function handleLogout() {
+    const success = await signOut();
+    if (success) {
+        window.location.href = "login.html";
+    } else {
+        alert("Error logging out. Please try again.");
+    }
+}
+</script>
+
+</body>
+</html>
