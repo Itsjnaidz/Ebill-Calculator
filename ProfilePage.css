@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
+body {
+    background: #f5f5f5;
+}
+
+.container {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background: #2F1FC0; /* THEME COLOR */
+    height: 100vh;
+    padding-top: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul a,
+.sidebar ul li {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.sidebar ul li:hover {
+    background: #4c3eff; /* LIGHTER THEME VARIANT */
+}
+
+/* MAIN CONTENT */
+.main {
+    flex: 1;
+    padding: 20px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* PROFILE CONTENT */
+.profile-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #2F1FC0; /* THEME COLOR */
+}
+
+.profile-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-info h3 {
+    font-size: 24px;
+    color: #2F1FC0; /* THEME COLOR */
+}
+
+.info-box {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-box label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2F1FC0; /* THEME COLOR */
+}
+
+.info-box input {
+    padding: 10px;
+    border: 1px solid #2F1FC0; /* THEME COLOR */
+    border-radius: 6px;
+    color: #2F1FC0;
+}
+
+.info-box input:focus {
+    outline: none;
+    border-color: #4c3eff;
+    background: #edeaff;
+}
+
+/* BUTTONS */
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 14px;
+    border: none;
+    cursor: pointer;
+    background: #2F1FC0; /* THEME COLOR */
+    color: white;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #4c3eff;
+}
+
+.export {
+    background: #444;
+}
+
+.export:hover {
+    background: #222;
+}
+
+.footer-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}

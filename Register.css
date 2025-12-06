@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 520px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* LEFT SIDE PANEL */
+.left-box {
+    width: 40%;
+    background: #2F1FC0; /* THEME COLOR */
+    color: white;
+    padding: 60px 40px;
+}
+
+.left-box h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.left-box h1 {
+    font-size: 35px;
+    margin-bottom: 20px;
+}
+
+.left-box .subtitle {
+    font-size: 15px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* RIGHT FORM SECTION */
+.right-box {
+    width: 60%;
+    padding: 40px 50px;
+}
+
+.right-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #2F1FC0; /* THEME BORDER */
+    border-radius: 6px;
+    font-size: 14px;
+    color: #2F1FC0;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2F1FC0;
+    background: #eceaff; /* soft theme highlight */
+}
+
+.submit-btn {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    background: #2F1FC0; /* THEME COLOR */
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background: #4c3eff; /* lighter theme hover */
+}
+
+.login-text {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-text a {
+    text-decoration: none;
+    color: #2F1FC0; /* THEME LINK COLOR */
+    font-weight: bold;
+}
+
+.login-text a:hover {
+    color: #4c3eff; /* theme hover */
+}
